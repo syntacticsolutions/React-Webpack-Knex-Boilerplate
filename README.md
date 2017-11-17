@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ![](http://jpsierens.com/wp-content/uploads/2016/06/react-eco-wp.gif)
 
 # webpack-react-redux
@@ -56,3 +57,7 @@ I went ahead and wrote a detailed series of posts on this project for you. I hop
 
 ## Why doesn't it have async?
 To keep it unopinionated. You choose what async library you want. If you want to check out a full example with async in it, check this simple [todo-app](https://github.com/jpsierens/todo-app) that uses redux-sagas.
+=======
+# react-webpack-bootstrap-boilerplate
+Integration of 'webpack-react-redux' with 'reactstrap'
+>>>>>>> c96809a1b948bceb43860db2d7480fb161955099
