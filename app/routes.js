@@ -6,6 +6,6 @@ import UserList from './components/UserList';
 export default (
 	<Switch>
 		<Route exact path="/" component={ Home } />
-		<Route path="/user_list" component={UserList} />
+		<Route path="/user_list" component={ UserList } />
 	</Switch>
 );
