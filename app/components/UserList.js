@@ -52,6 +52,7 @@ class UserList extends React.Component {
                 <Table className="table-responsive">
                     <thead>
                         <tr>
+                            <th>Actions</th>
                             <th>ID</th>
                             <th>First Name</th>
                             <th>Last Name</th>
