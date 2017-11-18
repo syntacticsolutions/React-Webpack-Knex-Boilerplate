@@ -24,9 +24,7 @@ export default class UserEntry extends React.Component {
     }
 
     setEditing() {
-        this.setState({
-            editing: true
-        });
+        this.props.callbackParent(this.props.index);
     }
 
     changeFirstName(event) {
@@ -68,7 +66,7 @@ export default class UserEntry extends React.Component {
     }
 
     render() {
-        return this.state.editing ? (
+        return this.props.editing === this.props.index ? (
             <tr>
                 <td>{this.props.index}</td>
                 <td><input onChange={this.changeFirstName} type="text" value={this.state.firstName}/></td>
@@ -101,5 +99,7 @@ UserEntry.propTypes = {
     address: React.PropTypes.string,
     city: React.PropTypes.string,
     state: React.PropTypes.string,
-    zip: React.PropTypes.string
+    zip: React.PropTypes.string,
+    editing: React.PropTypes.number,
+    callbackParent: React.PropTypes.func
 };

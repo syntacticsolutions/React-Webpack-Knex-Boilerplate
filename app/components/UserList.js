@@ -5,6 +5,8 @@ import UserEntry from './UserEntry';
 class UserList extends React.Component {
     constructor(props) {
         super(props);
+
+        this.onEditingChanged = this.onEditingChanged.bind(this);
         this.state = {
             users: [
                 {
@@ -23,8 +25,15 @@ class UserList extends React.Component {
                     state: 'France',
                     zip: '58374'
                 }
-            ]
+            ],
+            editing: null
         };
+    }
+
+    onEditingChanged(state) {
+        this.setState({
+            editing: state
+        });
     }
 
     render() {
@@ -54,7 +63,9 @@ class UserList extends React.Component {
                                 state={obj.state}
                                 zip={obj.zip}
                                 key={index}
-                                index={index} />
+                                index={index}
+                                editing={this.state.editing}
+                                callbackParent={(newState) => this.onEditingChanged(newState)} />
                             );
                         })}
                     </tbody>
