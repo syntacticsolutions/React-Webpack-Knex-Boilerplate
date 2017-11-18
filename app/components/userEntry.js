@@ -1,5 +1,11 @@
 import React from 'react';
 import _ from 'lodash';
+import mui from 'material-ui';
+import CheckCircle from 'material-ui-icons/CheckCircle';
+import DeleteForever from 'material-ui-icons/DeleteForever';
+import Edit from 'material-ui-icons/Edit';
+import Cancel from 'material-ui-icons/Cancel';
+import axios from 'axios';
 
 export default class UserEntry extends React.Component {
     constructor(props) {
@@ -10,7 +16,6 @@ export default class UserEntry extends React.Component {
         this.changeCity = this.changeCity.bind(this);
         this.changeState = this.changeState.bind(this);
         this.changeZip = this.changeZip.bind(this);
-        this.setEditing = this.setEditing.bind(this);
 
         this.state = {
             firstName: props.firstName,
@@ -21,10 +26,19 @@ export default class UserEntry extends React.Component {
             zip: props.zip,
             editing: false
         };
+
+        mui === _ ? console.log(true) : console.log(false);
     }
 
-    setEditing() {
-        this.props.callbackParent(this.props.index);
+    setEditing(index) {
+        this.props.callbackParent(index);
+    }
+
+    deleteForever(index) {
+        axios.delete('/api/users/' + index)
+    		.then((data) => {console.log(data);})
+            .catch((err) => {console.log(err);});
+    	// create endpoint for deleting and use axios to delete.
     }
 
     changeFirstName(event) {
@@ -68,6 +82,11 @@ export default class UserEntry extends React.Component {
     render() {
         return this.props.editing === this.props.index ? (
             <tr>
+            	<td>
+            		<CheckCircle color="green" onClick={()=>{this.confirmEdit(this.props.index);}} />
+            		<Cancel color="maroon" onClick={()=>{this.setEditing(null);}} />
+            		<DeleteForever onClick={()=>{this.deleteForever(this.props.index);}} color="red"/>
+            	</td>
                 <td>{this.props.index}</td>
                 <td><input onChange={this.changeFirstName} type="text" value={this.state.firstName}/></td>
                 <td><input onChange={this.changeLastName} type="text" value={this.state.lastName}/></td>
@@ -79,7 +98,8 @@ export default class UserEntry extends React.Component {
         )
         :
         (
-            <tr onClick={this.setEditing}>
+            <tr>
+            	<td><Edit color="green" onClick={()=>{this.setEditing(this.props.index);}}/></td>
                 <td>{this.props.index}</td>
                 <td>{this.props.firstName}</td>
                 <td>{this.props.lastName}</td>

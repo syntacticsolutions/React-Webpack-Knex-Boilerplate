@@ -17,12 +17,15 @@
   "author": "Jean-Pierre Sierens",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.17.1",
     "bootstrap": "^4.0.0-beta",
     "bootstrap-sass": "^3.3.7",
     "file-loader": "^0.9.0",
     "imports-loader": "^0.7.1",
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
+    "material-ui": "^1.0.0-beta.21",
+    "material-ui-icons": "^1.0.0-beta.17",
     "prop-types": "^15.5.9",
     "react": "^15.0.2",
     "react-bootstrap": "^0.31.5",
@@ -32,7 +35,8 @@
     "react-router-dom": "^4.1.1",
     "react-router-redux": "next",
     "reactstrap": "^5.0.0-alpha.4",
-    "redux": "^3.5.2"
+    "redux": "^3.5.2",
+    "vue-resource": "^1.3.4"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",

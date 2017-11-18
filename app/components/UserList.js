@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table } from 'reactstrap';
 import UserEntry from './UserEntry';
+import axios from 'axios';
 
 class UserList extends React.Component {
     constructor(props) {
@@ -28,6 +29,15 @@ class UserList extends React.Component {
             ],
             editing: null
         };
+    }
+
+    componentDidMount() {
+        axios.get('/api/users')
+        .then( (data) => {
+            console.log(data);
+        }, (err) => {
+            console.log(err);
+        });
     }
 
     onEditingChanged(state) {
