@@ -17,6 +17,7 @@ const users = {
 
 
 module.exports = {
+	// list all users
 
 	list: (req, res) => {
 
@@ -28,8 +29,9 @@ module.exports = {
 
 			return res.status(200).json(data);
 		})
-  		
 	},
+
+	//get users by id
 
 	get: (req, res) => {
 		return sql.select('*')
@@ -45,11 +47,35 @@ module.exports = {
 		})
 	},
 
+	// insert or update users
+
 	upsert: (req, res) => {
-		res.status(200).json({success:true});
+		var sql = sql.knex('users');
+
+		// validate input
+		if(!validate.valid(users)) return res.sendStatus(412);
+
+		if(req.parms.id){ 
+		//if id exists then update
+			sql = sql.update(req.body)
+			.where({id:req.params.id})
+
+		} else 
+		//if id not exists then insert
+			sql = sql.insert(req.body)
+
+		return sql.then(res => {
+			res.status(200).send(req.body);
+		})
 	},
 
 	delete: (req, res) => {
-		res.status(200).json({success:true});
+		return sql('users')
+		.where({'id': req.params.id})
+		.del()
+		.then(res =>{
+			if(!res)return res.sendStatus(404);
+			return res.sendStatus(200);
+		});
 	}
 }

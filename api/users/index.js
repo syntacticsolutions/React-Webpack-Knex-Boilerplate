@@ -9,6 +9,6 @@ users.post('/', api.upsert);
 
 users.put('/:id', api.upsert);
 
-users.delete('/:carId', api.delete);
+users.delete('/:id', api.delete);
 
 module.exports = users;
