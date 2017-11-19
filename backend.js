@@ -11,3 +11,5 @@ app.use('/', require('./api'));
 app.listen(7555, () => {
     console.log('Server running on http://localhost:7555');
 });
+
+module.exports = app;
