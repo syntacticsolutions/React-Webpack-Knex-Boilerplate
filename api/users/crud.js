@@ -78,7 +78,7 @@ module.exports = {
 				})
 		})
 		.catch(err =>{
-			return res.sendStatus(412).send(err);
+			return res.status(412).send(err);
 		})
 
 	},
