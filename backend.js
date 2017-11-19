@@ -1,18 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const store = require('./api/store');
 const app = express();
+const db = require('./api/sql');
 
 app.use(express.static('dist'));
 app.use(bodyParser.json());
-app.post('/createUser', (req, res) => {
-    store
-    .createUser({
-        username: req.body.username,
-        password: req.body.password
-    })
-    .then(() => res.sendStatus(200));
-});
+
+app.use('/', require('./api'));
+
 app.listen(7555, () => {
     console.log('Server running on http://localhost:7555');
 });
