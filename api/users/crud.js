@@ -1,5 +1,5 @@
 var sql = require('../sql');
-var validator = require('../validator');
+var validator = require('../validate');
 
 // define validation object parameters
 
@@ -24,8 +24,7 @@ module.exports = {
 		return sql.select().from('users')
 		.then(data => {
 
-			if(!data[0])
-				return res.sendStatus(404)
+			if(!data[0]) return res.sendStatus(404);
 
 			return res.status(200).json(data);
 		})
@@ -50,23 +49,38 @@ module.exports = {
 	// insert or update users
 
 	upsert: (req, res) => {
-		var sql = sql.knex('users');
+
+		var qry = sql.into('users');
 
 		// validate input
-		if(!validator.validate(users, req.body)) return res.sendStatus(412);
+		return new Promise((resolve, reject) =>{
 
-		if(req.parms.id){ 
-		//if id exists then update
-			return sql.update(req.body)
-			.where({id:req.params.id})
-
-		} else 
-		//if id not exists then insert
-			sql = sql.insert(req.body)
-
-		return sql.then(res => {
-			res.status(200).send(req.body);
+			let valid = validator.validate(users, req.body);
+			if(valid !== true) reject(valid);
+			resolve();
 		})
+		.then(() => {
+			if(req.params.id){ 
+				//if id exists then update
+				qry = qry.update(req.body)
+				.where({id:req.params.id});
+
+			} else {
+				//if id not exists then insert
+				qry = qry.insert(req.body);
+			}
+
+			return qry.then(num => {
+				
+				if(!num) return res.sendStatus(412);
+				
+					return res.status(200).send(req.body);
+				})
+		})
+		.catch(err =>{
+			return res.sendStatus(412).send(err);
+		})
+
 	},
 
 	delete: (req, res) => {
@@ -74,7 +88,9 @@ module.exports = {
 		.where({'id': req.params.id})
 		.del()
 		.then(res =>{
+
 			if(!res)return res.sendStatus(404);
+
 			return res.sendStatus(200);
 		});
 	}
