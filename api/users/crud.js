@@ -1,16 +1,16 @@
 var sql = require('../sql');
-var validate = require('../validate');
+var validator = require('../validator');
 
 // define validation object parameters
 
 const users = {
-	id: {type: validate.TYPE_INT },
-	first_name: { type: validate.TYPE_STR, length: 20 },
-	last_name: { type: validate.TYPE_STR, length: 20 },
-	address: { type: validate.TYPE_ADDR, length:35 },
-	city: { type: validate.TYPE_STR, length: 30 },
-	state: { type: validate.TYPE_STR, length: 30 },
-	zip: { type: validate.TYPE_INT, length: 5 }
+	id: { type: validator.TYPE_INT },
+	first_name: { type: validator.TYPE_NAME, length: 20, required: true },
+	last_name: { type: validator.TYPE_NAME, length: 20, required: true },
+	address: { type: validator.TYPE_ADDRESS, length:35, required: true },
+	city: { type: validator.TYPE_NAME, length: 30, required: true },
+	state: { type: validator.TYPE_NAME, length: 30, required: true },
+	zip: { type: validator.TYPE_ZIP, length: 5, required: true }
 }
 
 //Expose CRUD functions for endpoint.
@@ -53,11 +53,11 @@ module.exports = {
 		var sql = sql.knex('users');
 
 		// validate input
-		if(!validate.valid(users)) return res.sendStatus(412);
+		if(!validator.validate(users, req.body)) return res.sendStatus(412);
 
 		if(req.parms.id){ 
 		//if id exists then update
-			sql = sql.update(req.body)
+			return sql.update(req.body)
 			.where({id:req.params.id})
 
 		} else 
