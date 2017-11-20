@@ -1,11 +1,11 @@
 import React from 'react';
-import { Table, Button } from 'reactstrap';
+import { Table } from 'reactstrap';
 import UserEntry from './UserEntry';
+import FloatingActionButton from './FloatingActionButton';
 import axios from 'axios';
-import mui from 'material-ui';
-import { LibraryAdd } from 'material-ui-icons';
 import { rowStyle } from '../styles/rowStyles.scss';
 import { tableStyle } from '../styles/tableStyle.scss';
+
 
 class UserList extends React.Component {
     constructor(props) {
@@ -34,6 +34,10 @@ class UserList extends React.Component {
     deleteUser(idx) {
         delete this.state.users[idx];
         this.setState({ users: this.state.users });
+    }
+
+    addNewUser() {
+
     }
 
     render() {
@@ -72,6 +76,7 @@ class UserList extends React.Component {
                         })}
                     </tbody>
                 </Table>
+                <FloatingActionButton clicked={()=> this.addNewUser()} />
             </div>
         );
     }
