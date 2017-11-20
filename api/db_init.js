@@ -5,19 +5,17 @@ var fs = promise.promisifyAll(require('fs'));
 
 
 module.exports.init = (req, res) => {
-	fs.readdir('./tables', (err, files)=>{
-		promise.each(files, (file)=>{
-			fs.readFile('./tables/' + file, 'utf-8', (err, text)=>{
-				if(err) throw err;
-				return sql.raw(text)
-				.then(res =>{
-					console.log(res);
-				})
+	fs.readdir('./tables', function(err, files){
 
-			});
+		promise.map(files, function(fileName){
+			return sql.raw(fs.readFileSync('./tables/' + fileName).toString()).then()
 		})
-		.then(() => {
-			res.sendStatus(200);
+
+		.then(done=>{
+			return res.sendStatus(200);
+		})
+		.catch(err=>{
+			console.log(err);
 		})
 	});
 

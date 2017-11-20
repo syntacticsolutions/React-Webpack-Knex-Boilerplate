@@ -1,0 +1,1 @@
+truncate react_test.users;

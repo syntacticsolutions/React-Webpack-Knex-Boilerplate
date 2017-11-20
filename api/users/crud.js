@@ -55,7 +55,7 @@ module.exports = {
 		// validate input
 		return new Promise((resolve, reject) =>{
 
-			let valid = validator.validate(users, req.body);
+			let valid = validator.validate(users, req.body, (req.params.id || null));
 			if(valid !== true) reject(valid);
 			resolve();
 		})
