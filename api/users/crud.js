@@ -87,11 +87,11 @@ module.exports = {
 		return sql('users')
 		.where({'id': req.params.id})
 		.del()
-		.then(res =>{
+		.then(data =>{
 
-			if(!res)return res.sendStatus(404);
+			if(!data)return res.status(404).send("Not found.");
 
-			return res.sendStatus(200);
+			return res.status(200).send("success");
 		});
 	}
 }

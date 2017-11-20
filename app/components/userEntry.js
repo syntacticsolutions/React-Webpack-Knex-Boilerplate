@@ -18,6 +18,7 @@ export default class UserEntry extends React.Component {
         this.changeZip = this.changeZip.bind(this);
 
         this.state = {
+            id: props.id,
             firstName: props.firstName,
             lastName: props.lastName,
             address: props.address,
@@ -34,10 +35,11 @@ export default class UserEntry extends React.Component {
         this.props.callbackParent(index);
     }
 
-    deleteForever(index) {
-        axios.delete('/api/users/' + index)
-    		.then((data) => {console.log(data);})
-            .catch((err) => {console.log(err);});
+    deleteForever() {
+        axios.delete('http://localhost:7555/api/users/' + this.state.id)
+    .then(() => {
+        this.props.unmountMe(this.props.index);
+    }).catch((err) => {console.log(err);});
     	// create endpoint for deleting and use axios to delete.
     }
 
@@ -114,6 +116,7 @@ export default class UserEntry extends React.Component {
 
 UserEntry.propTypes = {
     index: React.PropTypes.number,
+    id: React.PropTypes.number,
     firstName: React.PropTypes.string,
     lastName: React.PropTypes.string,
     address: React.PropTypes.string,
@@ -121,5 +124,6 @@ UserEntry.propTypes = {
     state: React.PropTypes.string,
     zip: React.PropTypes.string,
     editing: React.PropTypes.number,
-    callbackParent: React.PropTypes.func
+    callbackParent: React.PropTypes.func,
+    unmountMe: React.PropTypes.func
 };

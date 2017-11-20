@@ -18,8 +18,6 @@ class UserList extends React.Component {
         axios.get('http://localhost:7555/api/users')
         .then( (data) => {
             this.setState({users: data.data});
-        }, (err) => {
-            console.log(err);
         });
     }
 
@@ -27,6 +25,11 @@ class UserList extends React.Component {
         this.setState({
             editing: state
         });
+    }
+
+    deleteUser(idx) {
+        delete this.state.users[idx];
+        this.setState({ users: this.state.users });
     }
 
     render() {
@@ -49,6 +52,7 @@ class UserList extends React.Component {
                         {this.state.users.map((obj, index) => {
                             return (
                                 <UserEntry
+                                id={obj.id}
                                 firstName={obj.first_name}
                                 lastName={obj.last_name}
                                 address={obj.address}
@@ -58,7 +62,8 @@ class UserList extends React.Component {
                                 key={index}
                                 index={index}
                                 editing={this.state.editing}
-                                callbackParent={(newState) => this.onEditingChanged(newState)} />
+                                callbackParent={(newState) => this.onEditingChanged(newState)}
+                                unmountMe={(idx) => this.deleteUser(idx)} />
                             );
                         })}
                     </tbody>
@@ -67,6 +72,5 @@ class UserList extends React.Component {
         );
     }
 }
-
 
 export default UserList;
