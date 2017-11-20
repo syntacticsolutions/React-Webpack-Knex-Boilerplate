@@ -9,32 +9,15 @@ class UserList extends React.Component {
 
         this.onEditingChanged = this.onEditingChanged.bind(this);
         this.state = {
-            users: [
-                {
-                    firstName: 'Michael',
-                    lastName: 'Coder',
-                    address: '1234 Da Vinci Ln.',
-                    city: 'Paris',
-                    state: 'France',
-                    zip: '58374'
-                },
-                {
-                    firstName: 'Michael',
-                    lastName: 'Coder',
-                    address: '1234 Da Vinci Ln.',
-                    city: 'Paris',
-                    state: 'France',
-                    zip: '58374'
-                }
-            ],
+            users: [],
             editing: null
         };
     }
 
     componentDidMount() {
-        axios.get('/api/users')
+        axios.get('http://localhost:7555/api/users')
         .then( (data) => {
-            console.log(data);
+            this.setState({users: data.data});
         }, (err) => {
             console.log(err);
         });
@@ -60,15 +43,14 @@ class UserList extends React.Component {
                             <th>City</th>
                             <th>State</th>
                             <th>Zip</th>
-                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {this.state.users.map((obj, index) => {
                             return (
                                 <UserEntry
-                                firstName={obj.firstName}
-                                lastName={obj.lastName}
+                                firstName={obj.first_name}
+                                lastName={obj.last_name}
                                 address={obj.address}
                                 city={obj.city}
                                 state={obj.state}
