@@ -1,7 +1,11 @@
 import React from 'react';
-import { Table } from 'reactstrap';
+import { Table, Button } from 'reactstrap';
 import UserEntry from './UserEntry';
 import axios from 'axios';
+import mui from 'material-ui';
+import { LibraryAdd } from 'material-ui-icons';
+import { rowStyle } from '../styles/rowStyles.scss';
+import { tableStyle } from '../styles/tableStyle.scss';
 
 class UserList extends React.Component {
     constructor(props) {
@@ -35,9 +39,9 @@ class UserList extends React.Component {
     render() {
         return (
             <div>
-                <Table className="table-responsive">
+                <Table className="table-responsive" className={tableStyle}>
                     <thead>
-                        <tr>
+                        <tr className={ rowStyle }>
                             <th>Actions</th>
                             <th>ID</th>
                             <th>First Name</th>

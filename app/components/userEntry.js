@@ -3,9 +3,9 @@ import _ from 'lodash';
 import mui from 'material-ui';
 import CheckCircle from 'material-ui-icons/CheckCircle';
 import DeleteForever from 'material-ui-icons/DeleteForever';
-import Edit from 'material-ui-icons/Edit';
-import Cancel from 'material-ui-icons/Cancel';
+import { Edit, Cancel } from 'material-ui-icons';
 import axios from 'axios';
+import { rowStyle } from '../styles/rowStyles.scss';
 
 export default class UserEntry extends React.Component {
     constructor(props) {
@@ -27,8 +27,6 @@ export default class UserEntry extends React.Component {
             zip: props.zip,
             editing: false
         };
-
-        mui === _ ? console.log(true) : console.log(false);
     }
 
     setEditing(index) {
@@ -92,11 +90,10 @@ export default class UserEntry extends React.Component {
 
     render() {
         return this.props.editing === this.props.index ? (
-            <tr>
+            <tr className={rowStyle}>
             	<td>
-            		<CheckCircle color="green" onClick={()=>{this.confirmEdit(this.props.index);}} />
-            		<Cancel color="maroon" onClick={()=>{this.setEditing(null);}} />
-            		<DeleteForever onClick={()=>{this.deleteForever(this.props.index);}} color="red"/>
+            		<CheckCircle color="#50C878" onClick={()=>{this.confirmEdit(this.props.index);}} />
+            		<Cancel color="#E03617" onClick={()=>{this.setEditing(null);}} />
             	</td>
                 <td>{this.props.index}</td>
                 <td><input onChange={this.changeFirstName} type="text" value={this.state.first_name}/></td>
@@ -109,8 +106,11 @@ export default class UserEntry extends React.Component {
         )
         :
         (
-            <tr>
-            	<td><Edit color="green" onClick={()=>{this.setEditing(this.props.index);}}/></td>
+            <tr className={rowStyle}>
+            	<td>
+                    <Edit color="#50C878" onClick={()=>{this.setEditing(this.props.index);}}/>
+                    <DeleteForever color="#E03617" onClick={()=>{this.deleteForever(this.props.index);}} />
+                </td>
                 <td>{this.props.index}</td>
                 <td>{this.props.firstName}</td>
                 <td>{this.props.lastName}</td>
