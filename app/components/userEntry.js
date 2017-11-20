@@ -19,8 +19,8 @@ export default class UserEntry extends React.Component {
 
         this.state = {
             id: props.id,
-            firstName: props.firstName,
-            lastName: props.lastName,
+            first_name: props.firstName,
+            last_name: props.lastName,
             address: props.address,
             city: props.city,
             state: props.state,
@@ -35,6 +35,15 @@ export default class UserEntry extends React.Component {
         this.props.callbackParent(index);
     }
 
+    confirmEdit() {
+        const { editing, ...rest } = _.cloneDeep(this.state);
+        axios.put('http://localhost:7555/api/users/' + this.state.id, rest)
+        .then(() => {
+            this.setEditing(null);
+        })
+        .catch(err => err);
+    }
+
     deleteForever() {
         axios.delete('http://localhost:7555/api/users/' + this.state.id)
     .then(() => {
@@ -45,13 +54,13 @@ export default class UserEntry extends React.Component {
 
     changeFirstName(event) {
         this.setState({
-            firstName: event.target.value
+            first_name: event.target.value
         });
     }
 
     changeLastName(event) {
         this.setState({
-            lastName: event.target.value
+            last_name: event.target.value
         });
     }
 
@@ -90,8 +99,8 @@ export default class UserEntry extends React.Component {
             		<DeleteForever onClick={()=>{this.deleteForever(this.props.index);}} color="red"/>
             	</td>
                 <td>{this.props.index}</td>
-                <td><input onChange={this.changeFirstName} type="text" value={this.state.firstName}/></td>
-                <td><input onChange={this.changeLastName} type="text" value={this.state.lastName}/></td>
+                <td><input onChange={this.changeFirstName} type="text" value={this.state.first_name}/></td>
+                <td><input onChange={this.changeLastName} type="text" value={this.state.last_name}/></td>
                 <td><input onChange={this.changeAddress} type="text" value={this.state.address}/></td>
                 <td><input onChange={this.changeCity} type="text" value={this.state.city}/></td>
                 <td><input onChange={this.changeState} type="text" value={this.state.state}/></td>

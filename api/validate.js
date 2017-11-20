@@ -30,8 +30,8 @@ module.exports = {
 
 				if(val.type === 'INT' && data[key]){
 					let num = parseInt(data[key]);
-					if( num < 1 || !isNaN(num)){
-						err = data[key] + ' is not a valid integer.';
+					if( num < 1 || isNaN(num)){
+						err = key + ' is not a valid integer.';
 						return false;
 					}
 				}
