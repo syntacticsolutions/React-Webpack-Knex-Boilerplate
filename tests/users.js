@@ -28,7 +28,7 @@ describe('API endpoint /users', function() {
         .then(function(res) {
             expect(res).to.have.status(200);
             expect(res).to.be.json;
-            expect(res.body).to.have.lengthOf(4);
+            expect(res.body).to.have.lengthOf(20);
         });
     });
 
@@ -52,7 +52,7 @@ describe('API endpoint /users', function() {
         .then(res=>{
             expect(res).to.have.status(200);
             expect(res).to.be.json;
-            expect(res.body.first_name).to.equal('Rachael');
+            expect(res.body.first_name).to.equal('Sara');
         })
     })
 
@@ -226,6 +226,21 @@ describe('API endpoint /users', function() {
         })
         .then((res)=>{
             expect(res.body.first_name).to.equal('Sean');
+        })
+    })
+
+    it('should delete an existing user', function(){
+        return tester.delete('/api/users/2')
+        .then((res)=>{
+            expect(res).to.have.status(200);
+        })
+    })
+
+    it('should return 404 for delete of non-existing user', function(){
+        return tester.delete('/api/users/6')
+        .then(res=>res)
+        .catch(err=>{
+            expect(err.response.text).to.equal('Not found.')
         })
     })
 
