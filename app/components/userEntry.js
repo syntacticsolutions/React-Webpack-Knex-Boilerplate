@@ -30,7 +30,7 @@ export default class UserEntry extends React.Component {
 
     setEditing(index) {
         if(this.props.inserting !== null) {
-            // add alert modal.
+            // remove
             return;
         }
         this.props.callbackParent(index);
@@ -40,7 +40,7 @@ export default class UserEntry extends React.Component {
         if (this.props.inserting === this.props.index) {
             axios.post('http://localhost:7555/api/users/', this.state)
             .then((res)=>{
-                this.setState(res.body);
+                this.setState(res.data);
                 this.setEditing(null);
             }).catch(err => {
                 this.props.showAlert('Error', err.response.data);
@@ -127,13 +127,13 @@ export default class UserEntry extends React.Component {
                     <Edit color="#50C878" onClick={()=>{this.setEditing(this.props.index);}}/>
                     <DeleteForever color="#E03617" onClick={()=>{this.deleteForever(this.props.index);}} />
                 </td>
-                <td>{this.props.id}</td>
-                <td>{this.props.firstName}</td>
-                <td>{this.props.lastName}</td>
-                <td>{this.props.address}</td>
-                <td>{this.props.city}</td>
-                <td>{this.props.state}</td>
-                <td>{this.props.zip}</td>
+                <td>{this.state.id}</td>
+                <td>{this.state.first_name}</td>
+                <td>{this.state.last_name}</td>
+                <td>{this.state.address}</td>
+                <td>{this.state.city}</td>
+                <td>{this.state.state}</td>
+                <td>{this.state.zip}</td>
             </tr>
         );
     }

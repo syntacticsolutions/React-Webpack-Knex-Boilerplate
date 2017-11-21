@@ -47,7 +47,6 @@ describe('API endpoint /users', function() {
     //GET a user
 
     it('should get 1 user', function() {
-
         return tester.get('/api/users/2')
         .then(res=>{
             expect(res).to.have.status(200);
