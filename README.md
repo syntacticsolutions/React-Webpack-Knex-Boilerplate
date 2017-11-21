@@ -17,10 +17,6 @@ Contains:
 * much more...
 
 
-
-![](http://jpsierens.com/wp-content/uploads/2016/06/filterableTable-1.gif)
-
-
 ## Initialize the App
 
 0. ```npm install```
