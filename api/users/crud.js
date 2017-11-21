@@ -76,10 +76,18 @@ module.exports = {
 			}
 
 			return qry.then(num => {
+				if(!num[0]) // if no id is returned then it could be an update
+					if(!num) return res.sendStatus(412); // if no numrows are returned then the qry has failed
 				
-				if(!num) return res.sendStatus(412);
-				
-					return res.status(200).send(req.body);
+					return sql.select('*')
+					.from('users')
+					.where({ id: req.params.id || num[0] }) //if it is not an update it will most certainly be an insert
+					.then(data=>{
+
+						if(!data) return res.sendStatus(500); //if there is no response that user doesn't exist
+						else return res.status(200).send(data[0]); //send the user with the new ID attached to it.
+					})
+
 				})
 		})
 		.catch(err =>{

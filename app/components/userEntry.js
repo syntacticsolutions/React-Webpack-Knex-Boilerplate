@@ -30,7 +30,9 @@ export default class UserEntry extends React.Component {
 
     setEditing(index) {
         if(this.props.inserting !== null) {
-            // remove
+            if(!this.state.id) this.props.deleteUnsavedEntry();
+            this.props.resetInserting();
+            this.props.callbackParent(null);
             return;
         }
         this.props.callbackParent(index);
@@ -152,5 +154,7 @@ UserEntry.propTypes = {
     callbackParent: React.PropTypes.func,
     unmountMe: React.PropTypes.func,
     inserting: React.PropTypes.number,
-    showAlert: React.PropTypes.func
+    showAlert: React.PropTypes.func,
+    resetInserting: React.PropTypes.func,
+    deleteUnsavedEntry: React.PropTypes.func
 };

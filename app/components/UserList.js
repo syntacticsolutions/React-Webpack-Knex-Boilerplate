@@ -27,7 +27,11 @@ class UserList extends React.Component {
     componentDidMount() {
         axios.get('http://localhost:7555/api/users')
         .then( (data) => {
-            this.setState({users: data.data});
+            this.setState({
+                users: data.data,
+                pages: Math.ceil(data.data.length / 5)
+            });
+            console.log(Math.ceil(data.data.length / 5));
         });
     }
 
@@ -40,6 +44,14 @@ class UserList extends React.Component {
     deleteUser(idx) {
         delete this.state.users[idx];
         this.setState({ users: this.state.users });
+    }
+
+    deleteLastUser() {
+        const users = _.cloneDeep(this.state.users);
+        delete users[users.length--];
+        this.setState({
+            users: users
+        });
     }
 
     addNewUser() {
@@ -78,6 +90,12 @@ class UserList extends React.Component {
         });
     }
 
+    resetInserting() {
+        this.setState({
+            inserting: null
+        });
+    }
+
     render() {
         return (
             <div className={tableStyle} >
@@ -111,7 +129,9 @@ class UserList extends React.Component {
                                 callbackParent={(newState) => this.onEditingChanged(newState)}
                                 unmountMe={(idx) => this.deleteUser(idx)}
                                 inserting={this.state.inserting}
-                                showAlert={(type, message)=> this.showAlertModal(type, message)}/>
+                                showAlert={(type, message)=> this.showAlertModal(type, message)}
+                                resetInserting={()=> this.resetInserting()}
+                                deleteUnsavedEntry={() => this.deleteLastUser()}/>
                             );
                         })}
                     </tbody>
