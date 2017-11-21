@@ -113,6 +113,16 @@ class UserList extends React.Component {
     }
 
     setCurrentPage(page) {
+        const lastPage = Math.ceil(this.state.users.length / 5);
+
+        if(this.state.currentPage === lastPage && this.state.inserting !== null) {
+            this.setState({
+                inserting: null,
+                editing: null,
+                users: this.state.users.slice(0, this.state.users.length - 1)
+            });
+        }
+
         if(page === 'last') {
             if(this.state.currentPage === 1) {
                 return;
@@ -120,7 +130,7 @@ class UserList extends React.Component {
             page = this.state.currentPage - 1;
         }
         if(page === 'next') {
-            if(this.state.currentPage === Math.ceil(this.state.users.length / 5)) {
+            if(this.state.currentPage === lastPage) {
                 return;
             }
             page = this.state.currentPage + 1;
