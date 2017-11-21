@@ -63,9 +63,9 @@ module.exports = {
 					return false;
 				}
 
-				if(val.required && !id && data[key]) {
+				if(val.required && !id && data[key] != undefined) {
 					if(data[key].length < 1){
-						err = key + ' cannot be empty.';
+						err = key.replace('_', ' ') + ' cannot be empty.';
 						return false;
 					}
 				}

@@ -6,6 +6,7 @@ import AlertModal from './AlertModal';
 import axios from 'axios';
 import { rowStyle } from '../styles/rowStyles.scss';
 import { tableStyle } from '../styles/tableStyle.scss';
+import BootstrapPagination from './Pagination';
 import _ from 'lodash';
 
 
@@ -20,7 +21,11 @@ class UserList extends React.Component {
             inserting: null,
             alertModalMessage: '',
             alertModalVisible: false,
-            alertModalType: ''
+            alertModalType: '',
+            currentPage: 1,
+            firstIndex: 0,
+            lastIndex: 4,
+            currentUsers: []
         };
     }
 
@@ -29,13 +34,19 @@ class UserList extends React.Component {
         .then( (data) => {
             this.setState({
                 users: data.data,
-                pages: Math.ceil(data.data.length / 5)
+                pages: Math.ceil(data.data.length / 5),
+                currentUsers: [data.data[0], data.data[1], data.data[2], data.data[3], data.data[4]]
             });
-            console.log(Math.ceil(data.data.length / 5));
         });
     }
 
     onEditingChanged(state) {
+        if(state === null && this.state.inserting !== null) {
+            this.setState({
+                inserting: null,
+                currentUsers: this.state.currentUsers.slice(0, this.state.currentUsers.length - 1)
+            });
+        }
         this.setState({
             editing: state
         });
@@ -69,8 +80,13 @@ class UserList extends React.Component {
         });
         this.setState({
             users: users,
-            editing: this.state.users.length,
-            inserting: this.state.users.length
+        });
+        _.defer(()=>{
+            this.setCurrentPage(Math.ceil(this.state.users.length / 5));
+            this.setState({
+                editing: this.state.currentUsers.length - 1,
+                inserting: this.state.currentUsers.length - 1
+            });
         });
     }
 
@@ -96,6 +112,30 @@ class UserList extends React.Component {
         });
     }
 
+    setCurrentPage(page) {
+        if(page === 'last') {
+            if(this.state.currentPage === 1) {
+                return;
+            }
+            page = this.state.currentPage - 1;
+        }
+        if(page === 'next') {
+            if(this.state.currentPage === Math.ceil(this.state.users.length / 5)) {
+                return;
+            }
+            page = this.state.currentPage + 1;
+        }
+        const firstIndex = page * 5 - 5;
+        const lastIndex = page * 5 - 1 <= this.state.users.length - 1 ?
+            page * 5 - 1 :
+            this.state.users.length - 1;
+
+        this.setState({
+            currentPage: page,
+            currentUsers: this.state.users.slice(firstIndex, lastIndex + 1)
+        });
+    }
+
     render() {
         return (
             <div className={tableStyle} >
@@ -113,7 +153,7 @@ class UserList extends React.Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.users.map((obj, index) => {
+                        {this.state.currentUsers.map((obj, index) => {
                             return (
                                 <UserEntry
                                 id={obj.id}
@@ -123,7 +163,7 @@ class UserList extends React.Component {
                                 city={obj.city}
                                 state={obj.state}
                                 zip={obj.zip}
-                                key={index}
+                                key={obj.id || -1}
                                 index={index}
                                 editing={this.state.editing}
                                 callbackParent={(newState) => this.onEditingChanged(newState)}
@@ -136,8 +176,16 @@ class UserList extends React.Component {
                         })}
                     </tbody>
                 </Table>
-                <FloatingActionButton clicked={()=> this.addNewUser()} />
-                <AlertModal hideModal={()=>this.hideModal()} hide={this.state.alertModalVisible} message={this.state.alertModalMessage} type={this.state.alertModalType}/>
+                <BootstrapPagination
+                    pages={this.state.pages}
+                    setCurrentPage={(page)=>this.setCurrentPage(page)}/>
+                <FloatingActionButton
+                    clicked={()=> this.addNewUser()}/>
+                <AlertModal
+                    hideModal={()=>this.hideModal()}
+                    hide={this.state.alertModalVisible}
+                    message={this.state.alertModalMessage}
+                    type={this.state.alertModalType}/>
             </div>
         );
     }

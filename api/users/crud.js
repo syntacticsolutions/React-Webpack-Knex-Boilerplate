@@ -77,7 +77,7 @@ module.exports = {
 
 			return qry.then(num => {
 				if(!num[0]) // if no id is returned then it could be an update
-					if(!num) return res.sendStatus(412); // if no numrows are returned then the qry has failed
+					if(!num) return res.status(412).send('Some value was entered incorrectly.'); // if no numrows are returned then the qry has failed
 				
 					return sql.select('*')
 					.from('users')
@@ -87,7 +87,6 @@ module.exports = {
 						if(!data) return res.sendStatus(500); //if there is no response that user doesn't exist
 						else return res.status(200).send(data[0]); //send the user with the new ID attached to it.
 					})
-
 				})
 		})
 		.catch(err =>{
