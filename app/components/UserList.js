@@ -67,7 +67,7 @@ class UserList extends React.Component {
 
     addNewUser() {
         // make sure only one user can be added at a time.
-        if(this.state.inserting === this.state.users.length - 1) return;
+        if(this.state.inserting !== null) return;
 
         const users = _.concat(this.state.users, {
             first_name: '',
