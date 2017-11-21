@@ -58,14 +58,8 @@ export default class UserEntry extends React.Component {
         }
     }
 
-    deleteForever() {
-        axios.delete('http://localhost:7555/api/users/' + this.state.id)
-        .then(() => {
-            this.props.unmountMe(this.props.index);
-        })
-        .catch(err => {
-            this.props.showAlert('Error', err.response.data);
-        });
+    deleteForever(id, index) {
+        this.props.deleteConfirm(this.state.id, index);
     }
 
     changeFirstName(event) {
@@ -127,7 +121,7 @@ export default class UserEntry extends React.Component {
             <tr className={rowStyle}>
             	<td>
                     <Edit color="#50C878" onClick={()=>{this.setEditing(this.props.index);}}/>
-                    <DeleteForever color="#E03617" onClick={()=>{this.deleteForever(this.props.index);}} />
+                    <DeleteForever color="#E03617" onClick={()=>{this.deleteForever(this.state.id, this.props.index);}} />
                 </td>
                 <td>{this.state.id}</td>
                 <td>{this.state.first_name}</td>
@@ -156,5 +150,6 @@ UserEntry.propTypes = {
     inserting: React.PropTypes.number,
     showAlert: React.PropTypes.func,
     resetInserting: React.PropTypes.func,
-    deleteUnsavedEntry: React.PropTypes.func
+    deleteUnsavedEntry: React.PropTypes.func,
+    deleteConfirm: React.PropTypes.func
 };

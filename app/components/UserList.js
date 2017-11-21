@@ -3,6 +3,7 @@ import { Table } from 'reactstrap';
 import UserEntry from './UserEntry';
 import FloatingActionButton from './FloatingActionButton';
 import AlertModal from './AlertModal';
+import ConfirmModal from './ConfirmModal';
 import axios from 'axios';
 import { rowStyle } from '../styles/rowStyles.scss';
 import { tableStyle } from '../styles/tableStyle.scss';
@@ -22,10 +23,13 @@ class UserList extends React.Component {
             alertModalMessage: '',
             alertModalVisible: false,
             alertModalType: '',
+            confirmModalVisible: false,
             currentPage: 1,
             firstIndex: 0,
             lastIndex: 4,
-            currentUsers: []
+            currentUsers: [],
+            deleting: null,
+            deletingIndex: null
         };
     }
 
@@ -37,6 +41,17 @@ class UserList extends React.Component {
                 pages: Math.ceil(data.data.length / 5),
                 currentUsers: [data.data[0], data.data[1], data.data[2], data.data[3], data.data[4]]
             });
+        });
+    }
+
+    setPages() {
+        this.setState({
+            pages: Math.ceil(this.state.users.length / 5)
+        });
+        _.defer(()=>{
+            if(this.state.currentPage > this.state.pages) {
+                this.setCurrentPage('last');
+            }
         });
     }
 
@@ -53,8 +68,15 @@ class UserList extends React.Component {
     }
 
     deleteUser(idx) {
-        delete this.state.users[idx];
-        this.setState({ users: this.state.users });
+        const usersIndex = this.state.currentPage * 5 - 5 + idx;
+        this.state.users.splice(usersIndex, 1);
+        this.setState({
+            currentUsers: this.state.users.slice(this.state.firstIndex, this.state.lastIndex + 1),
+            users: this.state.users,
+        });
+        _.defer(()=>{
+            this.setPages();
+        });
     }
 
     deleteLastUser() {
@@ -76,7 +98,7 @@ class UserList extends React.Component {
             city: '',
             state: '',
             zip: '',
-            editing: true
+            editing: true,
         });
         this.setState({
             users: users,
@@ -137,14 +159,46 @@ class UserList extends React.Component {
             }
             page = this.state.currentPage + 1;
         }
-        const firstIndex = page * 5 - 5;
-        const lastIndex = page * 5 - 1 <= this.state.users.length - 1 ?
+        this.state.firstIndex = page * 5 - 5;
+        this.state.lastIndex = page * 5 - 1 <= this.state.users.length - 1 ?
             page * 5 - 1 :
             this.state.users.length - 1;
 
         this.setState({
             currentPage: page,
-            currentUsers: this.state.users.slice(firstIndex, lastIndex + 1)
+            currentUsers: this.state.users.slice(this.state.firstIndex, this.state.lastIndex + 1)
+        });
+    }
+
+    confirmDelete() {
+        axios.delete('http://localhost:7555/api/users/' + this.state.deleting)
+        .then(() => {
+            this.deleteUser(this.state.deletingIndex);
+            this.hideConfirmModal();
+        })
+        .catch(err => {
+            this.hideConfirmModal();
+            this.showAlertModal('Error:', err.response.data);
+        });
+    }
+
+    showConfirmModal(id, idx) {
+        this.setState({
+            confirmModalVisible: true,
+            alertModalMessage: 'Are you sure you want to delete this user?',
+            alertModalType: 'Warning:',
+            deleting: id,
+            deletingIndex: idx
+        });
+    }
+
+    hideConfirmModal() {
+        this.setState({
+            confirmModalVisible: false,
+            alertModalMessage: '',
+            alertModalType: '',
+            deleting: null,
+            deletingIndex: null
         });
     }
 
@@ -183,7 +237,8 @@ class UserList extends React.Component {
                                 inserting={this.state.inserting}
                                 showAlert={(type, message)=> this.showAlertModal(type, message)}
                                 resetInserting={()=> this.resetInserting()}
-                                deleteUnsavedEntry={() => this.deleteLastUser()}/>
+                                deleteUnsavedEntry={() => this.deleteLastUser()}
+                                deleteConfirm={(id, indx) => this.showConfirmModal(id, indx)}/>
                             );
                         })}
                     </tbody>
@@ -196,6 +251,12 @@ class UserList extends React.Component {
                 <AlertModal
                     hideModal={()=>this.hideModal()}
                     hide={this.state.alertModalVisible}
+                    message={this.state.alertModalMessage}
+                    type={this.state.alertModalType}/>
+                <ConfirmModal
+                    hideModal={()=>this.hideConfirmModal()}
+                    confirm={()=>this.confirmDelete()}
+                    hide={this.state.confirmModalVisible}
                     message={this.state.alertModalMessage}
                     type={this.state.alertModalType}/>
             </div>
