@@ -30,15 +30,15 @@ Contains:
 0. Make a table in MySQL or your preferred database of choice.
 0. Edit your `knexfile.js` in the root directory
 
-0. `module.exports = {`
-    `client: 'mysql',`
-    `connection: {`
-        `host: '127.0.0.1',`
-        `user: <your_user>,`
-        `password: '<your_password>',`
-        `database: '<your_tablename>'`
-    `}`
-`};`
+0. `module.exports = {`  
+    `client: 'mysql',`  
+    `connection: {`  
+        `host: '127.0.0.1',`  
+        `user: <your_user>,`  
+        `password: '<your_password>',`  
+        `database: '<your_tablename>'`  
+    `}`  
+`};`  
 
 0. In your terminal:
     ```node backend```
