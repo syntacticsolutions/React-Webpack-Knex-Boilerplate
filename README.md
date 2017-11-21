@@ -48,11 +48,18 @@ Contains:
 
 0. Navigate in your browser to `http:localhost:7555/init`
 
-    This will initialize all of your test data.
+    This will initialize all of your test data. 'OK' will be displayed on the page.
+
+0. Navigate your browser to `http://localhost:7555/user_list` to see the react user list working.
+![alt text](https://github.com/syntacticsolutions/react-webpack-bootstrap-boilerplate/blob/master/example_images/Screen%20Shot%202017-11-21%20at%203.23.43%20PM.png)
 
 ## Test the Frontend
 
 0. ```npm start```
+
+0. Webpack is run by a Webpack Express server that serves content differently than the backend.
+
+    You will be able to test hot module reloading, and webpack updates at `http://localhost:3000/`
 
 Once running, if you want to hide the redux dev monitor: ```CTRL+H```
 
