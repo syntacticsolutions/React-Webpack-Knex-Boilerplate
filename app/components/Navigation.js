@@ -1,7 +1,9 @@
 import React from 'react';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 import { Redirect } from 'react-router';
+import { connect } from 'react-redux';
 import { navigation } from '../styles/navigation.scss';
+import AlertModal from './AlertModal';
 // import dependencies
 
 export default class Navigation extends React.Component {
@@ -16,7 +18,7 @@ export default class Navigation extends React.Component {
         this.state = {
             collapsed: true,
             shouldRedirect: false,
-            route: window.location.pathname,
+            route: window.location.pathname
         };
 
         // initialize state
@@ -69,4 +71,3 @@ export default class Navigation extends React.Component {
         );
     }
 }
-

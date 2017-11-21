@@ -20,6 +20,8 @@ class FloatingActionButton extends React.Component {
     }
 }
 
+export default FloatingActionButton;
+
 FloatingActionButton.propTypes = {
     clicked: React.PropTypes.func
 };

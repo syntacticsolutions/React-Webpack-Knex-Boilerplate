@@ -1,5 +1,6 @@
 var sql = require('../sql');
 var validator = require('../validate');
+var _ = require('lodash');
 
 // define validation object parameters
 
@@ -25,6 +26,10 @@ module.exports = {
 		.then(data => {
 
 			if(!data[0]) return res.sendStatus(404);
+
+			_.each(data, (user)=>{
+				user.zip = user.zip.toString();
+			})
 
 			return res.status(200).json(data);
 		})

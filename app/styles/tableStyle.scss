@@ -1,14 +1,16 @@
 .tableStyle {
-    max-height:85%;
-    top:56px;
-    position:relative;
-    tbody {
-        tr {
-            td {
-                input {
-                    max-width: 118px;
+    width: 100%;
+    overflow-x: scroll;
+    table{
+        tbody {
+            tr {
+                td {
+                    input {
+                        max-width: 118px;
+                    }
                 }
             }
-        }
+        } 
     }
+
 }

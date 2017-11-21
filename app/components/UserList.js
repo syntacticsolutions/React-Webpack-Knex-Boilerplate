@@ -2,9 +2,11 @@ import React from 'react';
 import { Table } from 'reactstrap';
 import UserEntry from './UserEntry';
 import FloatingActionButton from './FloatingActionButton';
+import AlertModal from './AlertModal';
 import axios from 'axios';
 import { rowStyle } from '../styles/rowStyles.scss';
 import { tableStyle } from '../styles/tableStyle.scss';
+import _ from 'lodash';
 
 
 class UserList extends React.Component {
@@ -14,7 +16,11 @@ class UserList extends React.Component {
         this.onEditingChanged = this.onEditingChanged.bind(this);
         this.state = {
             users: [],
-            editing: null
+            editing: null,
+            inserting: null,
+            alertModalMessage: '',
+            alertModalVisible: false,
+            alertModalType: ''
         };
     }
 
@@ -37,13 +43,45 @@ class UserList extends React.Component {
     }
 
     addNewUser() {
+        // make sure only one user can be added at a time.
+        if(this.state.inserting === this.state.users.length - 1) return;
 
+        const users = _.concat(this.state.users, {
+            first_name: '',
+            last_name: '',
+            address: '',
+            city: '',
+            state: '',
+            zip: '',
+            editing: true
+        });
+        this.setState({
+            users: users,
+            editing: this.state.users.length,
+            inserting: this.state.users.length
+        });
+    }
+
+    hideModal() {
+        this.setState({
+            alertModalVisible: false,
+            alertModalMessage: '',
+            alertModalType: ''
+        });
+    }
+
+    showAlertModal(type, message) {
+        this.setState({
+            alertModalVisible: true,
+            alertModalType: type,
+            alertModalMessage: message
+        });
     }
 
     render() {
         return (
-            <div>
-                <Table className="table-responsive" className={tableStyle}>
+            <div className={tableStyle} >
+                <Table className="table-responsive">
                     <thead>
                         <tr className={ rowStyle }>
                             <th>Actions</th>
@@ -71,12 +109,15 @@ class UserList extends React.Component {
                                 index={index}
                                 editing={this.state.editing}
                                 callbackParent={(newState) => this.onEditingChanged(newState)}
-                                unmountMe={(idx) => this.deleteUser(idx)} />
+                                unmountMe={(idx) => this.deleteUser(idx)}
+                                inserting={this.state.inserting}
+                                showAlert={(type, message)=> this.showAlertModal(type, message)}/>
                             );
                         })}
                     </tbody>
                 </Table>
                 <FloatingActionButton clicked={()=> this.addNewUser()} />
+                <AlertModal hideModal={()=>this.hideModal()} hide={this.state.alertModalVisible} message={this.state.alertModalMessage} type={this.state.alertModalType}/>
             </div>
         );
     }

@@ -25,29 +25,45 @@ export default class UserEntry extends React.Component {
             city: props.city,
             state: props.state,
             zip: props.zip,
-            editing: false
         };
     }
 
     setEditing(index) {
+        if(this.props.inserting !== null) {
+            // add alert modal.
+            return;
+        }
         this.props.callbackParent(index);
     }
 
     confirmEdit() {
-        const { editing, ...rest } = _.cloneDeep(this.state);
-        axios.put('http://localhost:7555/api/users/' + this.state.id, rest)
-        .then(() => {
-            this.setEditing(null);
-        })
-        .catch(err => err);
+        if (this.props.inserting === this.props.index) {
+            axios.post('http://localhost:7555/api/users/', this.state)
+            .then((res)=>{
+                this.setState(res.body);
+                this.setEditing(null);
+            }).catch(err => {
+                this.props.showAlert('Error', err.response.data);
+            });
+        } else {
+            axios.put('http://localhost:7555/api/users/' + this.state.id, this.state)
+            .then(() => {
+                this.setEditing(null);
+            })
+            .catch(err => {
+                this.props.showAlert('Error', err.response.data);
+            });
+        }
     }
 
     deleteForever() {
         axios.delete('http://localhost:7555/api/users/' + this.state.id)
-    .then(() => {
-        this.props.unmountMe(this.props.index);
-    }).catch((err) => {console.log(err);});
-    	// create endpoint for deleting and use axios to delete.
+        .then(() => {
+            this.props.unmountMe(this.props.index);
+        })
+        .catch(err => {
+            this.props.showAlert('Error', err.response.data);
+        });
     }
 
     changeFirstName(event) {
@@ -81,7 +97,7 @@ export default class UserEntry extends React.Component {
     }
 
     changeZip(event) {
-        if ( _.isNumber(event.target.value ) && event.target.value.length < 5) {
+        if ( !isNaN(event.target.value ) && event.target.value.length < 6) {
             this.setState({
                 zip: event.target.value
             });
@@ -95,7 +111,7 @@ export default class UserEntry extends React.Component {
             		<CheckCircle color="#50C878" onClick={()=>{this.confirmEdit(this.props.index);}} />
             		<Cancel color="#E03617" onClick={()=>{this.setEditing(null);}} />
             	</td>
-                <td>{this.props.index}</td>
+                <td>{this.props.id}</td>
                 <td><input onChange={this.changeFirstName} type="text" value={this.state.first_name}/></td>
                 <td><input onChange={this.changeLastName} type="text" value={this.state.last_name}/></td>
                 <td><input onChange={this.changeAddress} type="text" value={this.state.address}/></td>
@@ -111,7 +127,7 @@ export default class UserEntry extends React.Component {
                     <Edit color="#50C878" onClick={()=>{this.setEditing(this.props.index);}}/>
                     <DeleteForever color="#E03617" onClick={()=>{this.deleteForever(this.props.index);}} />
                 </td>
-                <td>{this.props.index}</td>
+                <td>{this.props.id}</td>
                 <td>{this.props.firstName}</td>
                 <td>{this.props.lastName}</td>
                 <td>{this.props.address}</td>
@@ -134,5 +150,7 @@ UserEntry.propTypes = {
     zip: React.PropTypes.string,
     editing: React.PropTypes.number,
     callbackParent: React.PropTypes.func,
-    unmountMe: React.PropTypes.func
+    unmountMe: React.PropTypes.func,
+    inserting: React.PropTypes.number,
+    showAlert: React.PropTypes.func
 };
