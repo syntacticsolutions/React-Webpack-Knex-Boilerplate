@@ -43,7 +43,7 @@ Contains:
 0. In your terminal:
     ```node backend```
 
-0. Your will see the output:
+0. You will see the output:
     ```Server running on http://localhost:7555```
 
 0. Navigate in your browser to `http:localhost:7555/init`
