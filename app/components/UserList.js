@@ -29,7 +29,8 @@ class UserList extends React.Component {
             lastIndex: 4,
             currentUsers: [],
             deleting: null,
-            deletingIndex: null
+            deletingIndex: null,
+            pages: 0
         };
     }
 
@@ -80,10 +81,9 @@ class UserList extends React.Component {
     }
 
     deleteLastUser() {
-        const users = _.cloneDeep(this.state.users);
-        delete users[users.length--];
+        this.state.users.pop();
         this.setState({
-            users: users
+            users: this.state.users
         });
     }
 
@@ -104,11 +104,12 @@ class UserList extends React.Component {
             users: users,
         });
         _.defer(()=>{
-            this.setCurrentPage(Math.ceil(this.state.users.length / 5));
             this.setState({
                 editing: this.state.currentUsers.length - 1,
                 inserting: this.state.currentUsers.length - 1
             });
+            if(Math.ceil(this.state.users.length / 5) > this.state.pages) this.setState({pages: this.state.pages + 1});
+            this.setCurrentPage(Math.ceil(this.state.users.length / 5));
         });
     }
 
@@ -134,26 +135,18 @@ class UserList extends React.Component {
         });
     }
 
+    addNewEntry(user) {
+        this.state.users.pop();
+        this.state.users.push(user);
+        this.setState({
+            users: this.state.users
+        });
+        this.setCurrentUsers(this.state.pages);
+    }
+
     setCurrentPage(page) {
-        if(page !== this.state.currentPage && this.state.editing !== null) {
-            this.setState({
-                editing: null,
-                currentUsers: this.state.currentUsers.slice(0, this.state.currentUsers.length - 1)
-            });
-        }
-
-        if(this.state.editing === this.state.currentPage) return;
-
-        const lastPage = Math.ceil(this.state.users.length / 5);
-
-        if(this.state.currentPage === lastPage && this.state.inserting !== null) {
-            this.setState({
-                inserting: null,
-                editing: null,
-                users: this.state.users.slice(0, this.state.users.length - 1)
-            });
-        }
-
+        const finalPage = Math.ceil(this.state.users.length / 5);
+        // set page if clicked on last or next button
         if(page === 'last') {
             if(this.state.currentPage === 1) {
                 return;
@@ -161,18 +154,98 @@ class UserList extends React.Component {
             page = this.state.currentPage - 1;
         }
         if(page === 'next') {
-            if(this.state.currentPage === lastPage) {
+            if(this.state.currentPage === finalPage) {
                 return;
             }
             page = this.state.currentPage + 1;
         }
+        // if editing
+        if(this.state.editing !== null) {
+            // if inserting
+            if(this.state.inserting !== null) {
+                // if we are not on the final page already
+                if(this.state.currentPage !== finalPage) {
+                    // if we are not going to last page for inserting new user
+                    if(page !== finalPage) {
+                        // reset inserting && editing
+                        this.setState({
+                            inserting: null,
+                            editing: null
+                        });
+                    }
+
+                    // then change the page
+                    this.setState({
+                        currentPage: page
+                    });
+
+                    this.setCurrentUsers(page);
+                    this.setState({
+                        editing: this.state.currentUsers.length - 1,
+                        inserting: this.state.currentUsers.length - 1
+                    });
+                }
+                if(page !== finalPage) {
+                    // reset inserting && editing
+                    this.setState({
+                        inserting: null,
+                        editing: null
+                    });
+                    this.setState({
+                        currentPage: page
+                    });
+
+                    this.setCurrentUsers(page);
+                    this.deleteLastUser();
+                }
+                if(this.state.currentPage === finalPage && page === finalPage) {
+                    this.setCurrentUsers(page);
+                    this.setState({
+                        editing: this.state.currentUsers.length - 1,
+                        inserting: this.state.currentUsers.length - 1
+                    });
+                }
+                // user has already been added, currentUsers must be reset
+
+            // else we are editing but not inserting
+            } else {
+                // if already on page then do nothing
+                if(this.state.currentPage === page) return;
+                // if changing page
+                if(page !== this.state.currentPage) {
+                    // unset editing and set page
+                    this.setState({
+                        currentPage: page,
+                        editing: null,
+                    });
+
+                    this.setCurrentUsers(page);
+                }
+            }
+        }
+
+        if(this.state.currentPage !== page) {
+            this.setState({
+                currentPage: page
+            });
+            this.setCurrentUsers(page);
+        }
+        // if(this.state.currentPage === finalPage && this.state.inserting !== null) {
+        //     this.setState({
+        //         inserting: null,
+        //         editing: null,
+        //         users: this.state.users.slice(0, this.state.users.length - 1)
+        //     });
+        // }
+    }
+
+    setCurrentUsers(page) {
         this.state.firstIndex = page * 5 - 5;
         this.state.lastIndex = page * 5 - 1 <= this.state.users.length - 1 ?
             page * 5 - 1 :
             this.state.users.length - 1;
 
         this.setState({
-            currentPage: page,
             currentUsers: this.state.users.slice(this.state.firstIndex, this.state.lastIndex + 1)
         });
     }
@@ -212,7 +285,7 @@ class UserList extends React.Component {
     render() {
         return (
             <div className={tableStyle} >
-                <Table className="table-responsive">
+                <Table hover responsive className="table-responsive">
                     <thead>
                         <tr className={ rowStyle }>
                             <th>Actions</th>
@@ -245,7 +318,8 @@ class UserList extends React.Component {
                                 showAlert={(type, message)=> this.showAlertModal(type, message)}
                                 resetInserting={()=> this.resetInserting()}
                                 deleteUnsavedEntry={() => this.deleteLastUser()}
-                                deleteConfirm={(id, indx) => this.showConfirmModal(id, indx)}/>
+                                deleteConfirm={(id, indx) => this.showConfirmModal(id, indx)}
+                                insertNewEntry={(state)=> this.addNewEntry(state)}/>
                             );
                         })}
                     </tbody>
@@ -254,7 +328,8 @@ class UserList extends React.Component {
                     pages={this.state.pages}
                     setCurrentPage={(page)=>this.setCurrentPage(page)}/>
                 <FloatingActionButton
-                    clicked={()=> this.addNewUser()}/>
+                    clicked={()=> this.addNewUser()}
+                    text="Add New User"/>
                 <AlertModal
                     hideModal={()=>this.hideModal()}
                     hide={this.state.alertModalVisible}

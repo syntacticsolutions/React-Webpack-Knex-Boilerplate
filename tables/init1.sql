@@ -1,1 +1,1 @@
-truncate react_test.users;
+truncate {}.users;

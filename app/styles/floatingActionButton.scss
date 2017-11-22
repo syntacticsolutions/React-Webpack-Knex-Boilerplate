@@ -25,3 +25,23 @@
 		}
 	}
 }
+
+.FABText {
+	background-color: #212121;
+	border-radius: 0.19em;
+	color: #FFF;
+	display: inherit;
+	font-family: 'Roboto';
+	font-size: 0.8em;
+	font-weight: 200;
+	min-width: 15em;
+	padding: 1em 2em;
+	right:55px;
+	bottom:-7px;
+	position: absolute;
+	text-align: left;
+}
+
+.displayNone {
+	display: none;
+}

@@ -38,11 +38,16 @@ export default class UserEntry extends React.Component {
         this.props.callbackParent(index);
     }
 
+    setParentState(state) {
+        this.props.insertNewEntry(state);
+    }
+
     confirmEdit() {
         if (this.props.inserting === this.props.index) {
             axios.post('http://localhost:7555/api/users/', this.state)
             .then((res)=>{
                 this.setState(res.data);
+                this.setParentState(res.data);
                 this.setEditing(null);
             }).catch(err => {
                 this.props.showAlert('Error', err.response.data);
@@ -151,5 +156,6 @@ UserEntry.propTypes = {
     showAlert: React.PropTypes.func,
     resetInserting: React.PropTypes.func,
     deleteUnsavedEntry: React.PropTypes.func,
-    deleteConfirm: React.PropTypes.func
+    deleteConfirm: React.PropTypes.func,
+    insertNewEntry: React.PropTypes.func
 };
