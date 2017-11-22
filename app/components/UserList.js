@@ -172,6 +172,7 @@ class UserList extends React.Component {
                             inserting: null,
                             editing: null
                         });
+                        // if last page no longer has users then remove last page
                     }
 
                     // then change the page
@@ -193,6 +194,12 @@ class UserList extends React.Component {
                         inserting: null,
                         editing: null
                     });
+                    if(this.state.currentUsers.length === 1) {
+                        this.setState({
+                            pages: this.state.pages - 1
+                        });
+                        this.pagination.setPagination(this.state.pages - 1);
+                    }
                     this.setState({
                         currentPage: page
                     });
