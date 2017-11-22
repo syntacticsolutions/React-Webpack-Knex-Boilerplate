@@ -179,6 +179,8 @@ class UserList extends React.Component {
                         currentPage: page
                     });
 
+                    this.pagination.setPagination(page);
+
                     this.setCurrentUsers(page);
                     this.setState({
                         editing: this.state.currentUsers.length - 1,
@@ -326,7 +328,8 @@ class UserList extends React.Component {
                 </Table>
                 <BootstrapPagination
                     pages={this.state.pages}
-                    setCurrentPage={(page)=>this.setCurrentPage(page)}/>
+                    setCurrentPage={(page)=>this.setCurrentPage(page)}
+                    ref={instance => { this.pagination = instance; }}/>
                 <FloatingActionButton
                     clicked={()=> this.addNewUser()}
                     text="Add New User"/>
