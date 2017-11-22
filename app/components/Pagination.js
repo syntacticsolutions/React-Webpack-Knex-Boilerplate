@@ -7,19 +7,45 @@ export default class BootstrapPagination extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            pages: props.pages
+            firstPage: 0,
+            lastPage: 5,
+            currentPage: 1
         };
     }
 
     setCurrentPage(i) {
-        this.props.setCurrentPage(i);
+        if(i === 'last') {
+            i = this.state.currentPage - 1;
+        }
+        if(i === 'next') {
+            i = this.state.currentPage + 1;
+        }
+
+        if(i >= 1 && i <= this.props.pages) {
+            this.props.setCurrentPage(i);
+            this.setState({
+                currentPage: i
+            });
+        }
+        if(i > this.state.lastPage && i <= this.props.pages) {
+            this.setState({
+                firstPage: this.state.firstPage + 1,
+                lastPage: this.state.lastPage + 1
+            });
+        }
+        if(i < this.state.firstPage + 1 && i >= 1) {
+            this.setState({
+                firstPage: this.state.firstPage - 1,
+                lastPage: this.state.lastPage - 1
+            });
+        }
     }
 
     render() {
         let pages = [];
-        for(let i = 0; i < this.props.pages; i++) {
+        for(let i = this.state.firstPage; i < this.state.lastPage; i++) {
             pages.push(
-                <PaginationItem key={i}>
+                <PaginationItem key={i} active={i + 1 === this.state.currentPage}>
                     <PaginationLink onClick={()=>this.setCurrentPage(i + 1)}>
                         {i + 1}
                     </PaginationLink>

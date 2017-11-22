@@ -30,7 +30,7 @@ class UserList extends React.Component {
             currentUsers: [],
             deleting: null,
             deletingIndex: null,
-            pages: 0
+            pages: null
         };
     }
 
