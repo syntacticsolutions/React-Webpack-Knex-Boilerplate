@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import mui from 'material-ui';
+import TextField from 'material-ui/TextField';
 import CheckCircle from 'material-ui-icons/CheckCircle';
 import DeleteForever from 'material-ui-icons/DeleteForever';
 import { Edit, Cancel } from 'material-ui-icons';
@@ -113,12 +113,12 @@ export default class UserEntry extends React.Component {
             		<Cancel color="#E03617" onClick={()=>{this.setEditing(null);}} />
             	</td>
                 <td>{this.props.id}</td>
-                <td><input onChange={this.changeFirstName} type="text" value={this.state.first_name}/></td>
-                <td><input onChange={this.changeLastName} type="text" value={this.state.last_name}/></td>
-                <td><input onChange={this.changeAddress} type="text" value={this.state.address}/></td>
-                <td><input onChange={this.changeCity} type="text" value={this.state.city}/></td>
-                <td><input onChange={this.changeState} type="text" value={this.state.state}/></td>
-                <td><input onChange={this.changeZip} type="text" value={this.state.zip}/></td>
+                <td><TextField floatingLabelText="First Name" onChange={this.changeFirstName} type="text" value={this.state.first_name}/></td>
+                <td><TextField floatingLabelText="Last Name" onChange={this.changeLastName} type="text" value={this.state.last_name}/></td>
+                <td><TextField floatingLabelText="Address" onChange={this.changeAddress} type="text" value={this.state.address}/></td>
+                <td><TextField floatingLabelText="City" onChange={this.changeCity} type="text" value={this.state.city}/></td>
+                <td><TextField floatingLabelText="State" onChange={this.changeState} type="text" value={this.state.state}/></td>
+                <td><TextField floatingLabelText="Zip" onChange={this.changeZip} type="text" value={this.state.zip}/></td>
             </tr>
         )
         :
