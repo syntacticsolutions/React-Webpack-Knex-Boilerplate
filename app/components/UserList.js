@@ -135,7 +135,14 @@ class UserList extends React.Component {
     }
 
     setCurrentPage(page) {
-        if(page === this.state.currentPage) return;
+        if(page !== this.state.currentPage && this.state.editing !== null) {
+            this.setState({
+                editing: null,
+                currentUsers: this.state.currentUsers.slice(0, this.state.currentUsers.length - 1)
+            });
+        }
+
+        if(this.state.editing === this.state.currentPage) return;
 
         const lastPage = Math.ceil(this.state.users.length / 5);
 

@@ -46,7 +46,11 @@ Contains:
 
     This will initialize all of your test data. 'OK' will be displayed on the page.
 
-0. Navigate your browser to `http://localhost:7555/user_list` to see the react user list working.
+0. Navigate your browser to `http://localhost:7555/` to get to the app.
+
+    You will have to click on the menu bar to navigate to the user list portion of the app.
+
+    This is here to show you that it is a single page app using React-Router.
 ![alt text](https://github.com/syntacticsolutions/react-webpack-bootstrap-boilerplate/blob/master/example_images/Screen%20Shot%202017-11-21%20at%203.23.43%20PM.png)
 
 ## Test the Frontend
