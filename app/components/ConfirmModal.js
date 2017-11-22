@@ -28,7 +28,7 @@ export default class ConfirmModal extends React.Component {
                             {this.props.message}
                         </div>
                         <Button onClick={()=>{this.confirm();}} color="warning" className={modalButton}>Confirm</Button>
-                        <Button onClick={()=>{this.hideModal();}} color="primary" className={modalButton}>Cancel</Button>
+                        <Button style={{float: 'right'}} onClick={()=>{this.hideModal();}} color="primary" className={modalButton}>Cancel</Button>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { PaginationLink, Pagination, PaginationItem } from 'reactstrap';
 import { each } from 'lodash';
+import { myPagination } from '../styles/myPagination.scss';
 
 export default class BootstrapPagination extends React.Component {
     constructor(props) {
@@ -27,15 +28,17 @@ export default class BootstrapPagination extends React.Component {
         }
 
         return (
-            <Pagination>
-            <PaginationItem>
-              <PaginationLink previous onClick={()=>this.setCurrentPage('last')}/>
-            </PaginationItem>
-            { pages }
-            <PaginationItem>
-              <PaginationLink next onClick={()=>this.setCurrentPage('next')}/>
-            </PaginationItem>
-          </Pagination>
+            <div className={'text-center'}>
+                <Pagination className={myPagination}>
+                    <PaginationItem>
+                        <PaginationLink previous onClick={()=>this.setCurrentPage('last')}/>
+                    </PaginationItem>
+                    { pages }
+                    <PaginationItem>
+                        <PaginationLink next onClick={()=>this.setCurrentPage('next')}/>
+                    </PaginationItem>
+                </Pagination>
+            </div>
         );
     }
 }
