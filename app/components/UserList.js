@@ -8,6 +8,7 @@ import axios from 'axios';
 import { rowStyle } from '../styles/rowStyles.scss';
 import { tableStyle } from '../styles/tableStyle.scss';
 import BootstrapPagination from './Pagination';
+import { FilterList } from 'material-ui-icons';
 import _ from 'lodash';
 
 
@@ -30,7 +31,9 @@ class UserList extends React.Component {
             currentUsers: [],
             deleting: null,
             deletingIndex: null,
-            pages: null
+            pages: null,
+            currentOrder: null,
+            currentSort: null,
         };
     }
 
@@ -52,6 +55,7 @@ class UserList extends React.Component {
         _.defer(()=>{
             if(this.state.currentPage > this.state.pages) {
                 this.setCurrentPage('last');
+                this.pagination.setPagination(Math.ceil(this.state.users.length / 5));
             }
         });
     }
@@ -61,6 +65,9 @@ class UserList extends React.Component {
             this.setState({
                 inserting: null,
                 currentUsers: this.state.currentUsers.slice(0, this.state.currentUsers.length - 1)
+            });
+            _.defer(()=>{
+                this.setPages();
             });
         }
         this.setState({
@@ -291,6 +298,29 @@ class UserList extends React.Component {
         });
     }
 
+    sort(property) {
+        if(this.state.currentSort !== null && this.state.currentSort !== property) {
+            this.state.currentOrder = null;
+            this.setState({
+                currentOrder: this.state.currentOrder
+            });
+        }
+        this.state.currentSort = property;
+        const order = this.state.currentOrder === null ? 'asc'
+        :
+        this.state.currentOrder === 'asc' ? 'desc'
+        : 'asc';
+        this.state.users = _.orderBy(this.state.users, property, order);
+        this.setState({
+            users: this.state.users,
+            currentOrder: order,
+            currentSort: property
+        });
+
+        this.setCurrentUsers(1);
+        this.pagination.setFilterPage();
+    }
+
     render() {
         return (
             <div className={tableStyle} >
@@ -298,13 +328,13 @@ class UserList extends React.Component {
                     <thead>
                         <tr className={ rowStyle }>
                             <th>Actions</th>
-                            <th>ID</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Address</th>
-                            <th>City</th>
-                            <th>State</th>
-                            <th>Zip</th>
+                            <th onClick={()=>this.sort('id')}><FilterList style={{width: '15px'}}/>ID</th>
+                            <th onClick={()=>this.sort('first_name')}><FilterList style={{width: '15px'}}/>First Name</th>
+                            <th onClick={()=>this.sort('last_name')}><FilterList style={{width: '15px'}}/>Last Name</th>
+                            <th onClick={()=>this.sort('address')}><FilterList style={{width: '15px'}}/>Address</th>
+                            <th onClick={()=>this.sort('city')}><FilterList style={{width: '15px'}}/>City</th>
+                            <th onClick={()=>this.sort('state')}><FilterList style={{width: '15px'}}/>State</th>
+                            <th onClick={()=>this.sort('zip')}><FilterList style={{width: '15px'}}/>Zip</th>
                         </tr>
                     </thead>
                     <tbody>

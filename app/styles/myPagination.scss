@@ -1,3 +1,10 @@
 .myPagination {
     display: inline-flex!important;
 }
+
+.pageActive {
+    z-index: 2;
+    color: #fff;
+    background-color: #FFDCB7;
+    border-color: #FFDCB7;
+}

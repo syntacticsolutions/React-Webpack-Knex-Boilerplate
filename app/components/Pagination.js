@@ -1,7 +1,7 @@
 import React from 'react';
 import { PaginationLink, Pagination, PaginationItem } from 'reactstrap';
 import { each } from 'lodash';
-import { myPagination } from '../styles/myPagination.scss';
+import { myPagination, pageActive } from '../styles/myPagination.scss';
 
 export default class BootstrapPagination extends React.Component {
     constructor(props) {
@@ -49,12 +49,20 @@ export default class BootstrapPagination extends React.Component {
         });
     }
 
+    setFilterPage() {
+        this.setState({
+            currentPage: 1,
+            firstPage: 0,
+            lastPage: 5
+        });
+    }
+
     render() {
         let pages = [];
         for(let i = this.state.firstPage; i < this.state.lastPage; i++) {
             pages.push(
-                <PaginationItem key={i} active={i + 1 === this.state.currentPage}>
-                    <PaginationLink onClick={()=>this.setCurrentPage(i + 1)}>
+                <PaginationItem key={i}>
+                    <PaginationLink onClick={()=>this.setCurrentPage(i + 1)} className={i + 1 === this.state.currentPage ? pageActive : ''}>
                         {i + 1}
                     </PaginationLink>
                 </PaginationItem>

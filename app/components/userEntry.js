@@ -1,11 +1,8 @@
 import React from 'react';
-import _ from 'lodash';
 import TextField from 'material-ui/TextField';
-import CheckCircle from 'material-ui-icons/CheckCircle';
-import DeleteForever from 'material-ui-icons/DeleteForever';
-import { Edit, Cancel } from 'material-ui-icons';
+import { Edit, Cancel, DeleteForever, CheckCircle } from 'material-ui-icons';
 import axios from 'axios';
-import { rowStyle } from '../styles/rowStyles.scss';
+import { rowStyle, actionStyle } from '../styles/rowStyles.scss';
 
 export default class UserEntry extends React.Component {
     constructor(props) {
@@ -108,23 +105,23 @@ export default class UserEntry extends React.Component {
     render() {
         return this.props.editing === this.props.index ? (
             <tr className={rowStyle}>
-            	<td>
+            	<td className={actionStyle}>
             		<CheckCircle color="#50C878" onClick={()=>{this.confirmEdit(this.props.index);}} />
             		<Cancel color="#E03617" onClick={()=>{this.setEditing(null);}} />
             	</td>
                 <td>{this.props.id}</td>
-                <td><TextField floatingLabelText="First Name" onChange={this.changeFirstName} type="text" value={this.state.first_name}/></td>
-                <td><TextField floatingLabelText="Last Name" onChange={this.changeLastName} type="text" value={this.state.last_name}/></td>
-                <td><TextField floatingLabelText="Address" onChange={this.changeAddress} type="text" value={this.state.address}/></td>
-                <td><TextField floatingLabelText="City" onChange={this.changeCity} type="text" value={this.state.city}/></td>
-                <td><TextField floatingLabelText="State" onChange={this.changeState} type="text" value={this.state.state}/></td>
-                <td><TextField floatingLabelText="Zip" onChange={this.changeZip} type="text" value={this.state.zip}/></td>
+                <td><TextField onChange={this.changeFirstName} type="text" value={this.state.first_name}/></td>
+                <td><TextField onChange={this.changeLastName} type="text" value={this.state.last_name}/></td>
+                <td><TextField onChange={this.changeAddress} type="text" value={this.state.address}/></td>
+                <td><TextField onChange={this.changeCity} type="text" value={this.state.city}/></td>
+                <td><TextField onChange={this.changeState} type="text" value={this.state.state}/></td>
+                <td><TextField onChange={this.changeZip} type="text" value={this.state.zip}/></td>
             </tr>
         )
         :
         (
             <tr className={rowStyle}>
-            	<td>
+            	<td className={actionStyle}>
                     <Edit color="#50C878" onClick={()=>{this.setEditing(this.props.index);}}/>
                     <DeleteForever color="#E03617" onClick={()=>{this.deleteForever(this.state.id, this.props.index);}} />
                 </td>
