@@ -30,9 +30,26 @@
     }
     .modal-body {
         margin: 20px 0;
+        margin-bottom: 20px;
     }
 }
 
 .modalButton {
     margin-top:20px;
 }
+
+.cancelButton {
+    background-color: #78DC9A!important;
+    border-color: #78DC9A!important;
+    color: 'white';
+    float: right;
+    margin-right:45px;
+}
+
+.confirmButton {
+    color: 'white';
+    background-color: #FF9D8B!important;
+    border-color: #FF9D8B!important;
+    margin-left:45px;
+}
+

@@ -25,7 +25,7 @@ class FloatingActionButton extends React.Component {
             <section className={ FAB } onClick={()=>{this.clicked();}}>
             <div onMouseOver={()=>this.hovered(true)} onMouseOut={()=>this.hovered(false)}>
                 <LibraryAdd  color="white" />
-                <p className={ this.state.hovered ? FABText : displayNone } >{ this.props.text }</p>
+                {/* <p className={ this.state.hovered ? FABText : displayNone } >{ this.props.text }</p> */}
             </div>
             </section>
         );

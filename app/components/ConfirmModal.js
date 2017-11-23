@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'reactstrap';
-import { alertModal, modalContainer, modalWrapper, modalButton } from '../styles/alertModal.scss';
+import { alertModal, modalContainer, modalWrapper, cancelButton, confirmButton } from '../styles/alertModal.scss';
 
 export default class ConfirmModal extends React.Component {
     constructor(props) {
@@ -22,13 +22,21 @@ export default class ConfirmModal extends React.Component {
                 <div className={modalWrapper}>
                     <div className={modalContainer}>
                         <div>
-                            <h3>{this.props.type}</h3>
+                            <h3 style={{color: '#F66044'}}>{this.props.type}</h3>
                         </div>
-                        <div>
+                        <div style={{marginBottom: '20px'}}>
                             {this.props.message}
                         </div>
-                        <Button onClick={()=>{this.confirm();}} color="warning" className={modalButton}>Confirm</Button>
-                        <Button style={{float: 'right'}} onClick={()=>{this.hideModal();}} color="primary" className={modalButton}>Cancel</Button>
+                        <Button
+                            onClick={()=>{this.confirm();}}
+                            className={confirmButton}>
+                                Yes
+                        </Button>
+                        <Button
+                            onClick={()=>{this.hideModal();}}
+                            className={cancelButton}>
+                                No
+                        </Button>
                     </div>
                 </div>
             </div>

@@ -6,17 +6,23 @@ import AlertModal from './AlertModal';
 import ConfirmModal from './ConfirmModal';
 import axios from 'axios';
 import { rowStyle } from '../styles/rowStyles.scss';
-import { tableStyle } from '../styles/tableStyle.scss';
+import { tableStyle, goTo } from '../styles/tableStyle.scss';
 import BootstrapPagination from './Pagination';
 import { FilterList } from 'material-ui-icons';
+import { TextField } from 'material-ui';
 import _ from 'lodash';
 
+const config = {
+    perPage: 8 // changes the amount of users visible per page
+};
 
 class UserList extends React.Component {
     constructor(props) {
         super(props);
 
         this.onEditingChanged = this.onEditingChanged.bind(this);
+        this.setPage = this.setPage.bind(this);
+        this.validatePage = this.validatePage.bind(this);
         this.state = {
             users: [],
             editing: null,
@@ -27,13 +33,14 @@ class UserList extends React.Component {
             confirmModalVisible: false,
             currentPage: 1,
             firstIndex: 0,
-            lastIndex: 4,
+            lastIndex: config.perPage - 1,
             currentUsers: [],
             deleting: null,
             deletingIndex: null,
             pages: null,
             currentOrder: null,
             currentSort: null,
+            goToPage: null
         };
     }
 
@@ -42,20 +49,20 @@ class UserList extends React.Component {
         .then( (data) => {
             this.setState({
                 users: data.data,
-                pages: Math.ceil(data.data.length / 5),
-                currentUsers: [data.data[0], data.data[1], data.data[2], data.data[3], data.data[4]]
+                pages: Math.ceil(data.data.length / config.perPage),
+                currentUsers: data.data.slice(0, config.perPage),
             });
         });
     }
 
     setPages() {
         this.setState({
-            pages: Math.ceil(this.state.users.length / 5)
+            pages: Math.ceil(this.state.users.length / config.perPage)
         });
         _.defer(()=>{
             if(this.state.currentPage > this.state.pages) {
                 this.setCurrentPage('last');
-                this.pagination.setPagination(Math.ceil(this.state.users.length / 5));
+                this.pagination.setPagination(Math.ceil(this.state.users.length / config.perPage));
             }
         });
     }
@@ -76,7 +83,7 @@ class UserList extends React.Component {
     }
 
     deleteUser(idx) {
-        const usersIndex = this.state.currentPage * 5 - 5 + idx;
+        const usersIndex = this.state.currentPage * config.perPage - config.perPage + idx;
         this.state.users.splice(usersIndex, 1);
         this.setState({
             currentUsers: this.state.users.slice(this.state.firstIndex, this.state.lastIndex + 1),
@@ -115,8 +122,8 @@ class UserList extends React.Component {
                 editing: this.state.currentUsers.length - 1,
                 inserting: this.state.currentUsers.length - 1
             });
-            if(Math.ceil(this.state.users.length / 5) > this.state.pages) this.setState({pages: this.state.pages + 1});
-            this.setCurrentPage(Math.ceil(this.state.users.length / 5));
+            if(Math.ceil(this.state.users.length / config.perPage) > this.state.pages) this.setState({pages: this.state.pages + 1});
+            this.setCurrentPage(Math.ceil(this.state.users.length / config.perPage));
         });
     }
 
@@ -152,7 +159,7 @@ class UserList extends React.Component {
     }
 
     setCurrentPage(page) {
-        const finalPage = Math.ceil(this.state.users.length / 5);
+        const finalPage = Math.ceil(this.state.users.length / config.perPage);
         // set page if clicked on last or next button
         if(page === 'last') {
             if(this.state.currentPage === 1) {
@@ -256,9 +263,9 @@ class UserList extends React.Component {
     }
 
     setCurrentUsers(page) {
-        this.state.firstIndex = page * 5 - 5;
-        this.state.lastIndex = page * 5 - 1 <= this.state.users.length - 1 ?
-            page * 5 - 1 :
+        this.state.firstIndex = page * config.perPage - config.perPage;
+        this.state.lastIndex = page * config.perPage - 1 <= this.state.users.length - 1 ?
+            page * config.perPage - 1 :
             this.state.users.length - 1;
 
         this.setState({
@@ -296,6 +303,26 @@ class UserList extends React.Component {
             deleting: null,
             deletingIndex: null
         });
+    }
+
+    setPage(event) {
+        const page = parseInt(event.target.value, 10) || '';
+        if(event.key === 'Enter') {
+            if(page > 0 && page < this.state.pages) {
+                this.setCurrentPage(page);
+            } else {
+                this.showAlertModal('Error', 'That page does not exist.');
+            }
+        }
+    }
+
+    validatePage(event) {
+        const page = parseInt(event.target.value, 10);
+        // if(!isNaN(page)) {
+        //     this.setState({
+        //         goToPage: page
+        //     });
+        // }
     }
 
     sort(property) {
@@ -367,6 +394,13 @@ class UserList extends React.Component {
                     pages={this.state.pages}
                     setCurrentPage={(page)=>this.setCurrentPage(page)}
                     ref={instance => { this.pagination = instance; }}/>
+                <div>
+                    Go To Page:
+                    <input className={goTo}
+                    onChange={this.validatePage}
+                    onKeyPress={this.setPage}
+                    value={this.state.goToPage}/>
+                </div>
                 <FloatingActionButton
                     clicked={()=> this.addNewUser()}
                     text="Add New User"/>

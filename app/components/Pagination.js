@@ -61,7 +61,7 @@ export default class BootstrapPagination extends React.Component {
         let pages = [];
         for(let i = this.state.firstPage; i < this.state.lastPage; i++) {
             pages.push(
-                <PaginationItem key={i}>
+                <PaginationItem key={i} style={{minWidth: '45px'}}>
                     <PaginationLink onClick={()=>this.setCurrentPage(i + 1)} className={i + 1 === this.state.currentPage ? pageActive : ''}>
                         {i + 1}
                     </PaginationLink>
