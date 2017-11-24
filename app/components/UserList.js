@@ -40,7 +40,7 @@ class UserList extends React.Component {
             pages: null,
             currentOrder: 'asc',
             currentSort: 'id',
-            goToPage: null
+            goToPage: ''
         };
     }
 

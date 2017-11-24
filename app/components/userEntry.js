@@ -43,6 +43,7 @@ export default class UserEntry extends React.Component {
         if (this.props.inserting === this.props.index) {
             axios.post('http://localhost:7555/api/users/', this.state)
             .then((res)=>{
+                res.data.zip = res.data.zip.toString();
                 this.setState(res.data);
                 this.setParentState(res.data);
                 this.setEditing(null);
