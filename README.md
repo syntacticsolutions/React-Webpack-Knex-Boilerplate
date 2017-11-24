@@ -45,6 +45,14 @@ Contains:
 0. You will see the output:
     ```Server running on http://localhost:7555```
 
+0. Mocha and Chai Unit tests can be run using Visual Studio Code for your IDE.
+
+![alt text](https://github.com/syntacticsolutions/react-webpack-bootstrap-boilerplate/blob/master/example_images/mochaChai.png)
+
+0. You will see something like this in your terminal.
+
+![alt text](https://github.com/syntacticsolutions/react-webpack-bootstrap-boilerplate/blob/master/example_images/testResults.png)
+
 0. Navigate in your browser to `http:localhost:7555/init`
 
     This will initialize all of your test data. 'OK' will be displayed on the page.
