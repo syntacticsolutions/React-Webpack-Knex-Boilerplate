@@ -316,6 +316,7 @@ class UserList extends React.Component {
                     this.setPages();
                 }
                 this.setCurrentPage(page);
+                this.pagination.setPagination(page);
             } else {
                 this.showAlertModal('Error', 'That page does not exist.');
             }
@@ -377,8 +378,6 @@ class UserList extends React.Component {
 
         // set pagination page to first page
         this.pagination.setFilterPage();
-
-        console.log(this.state.users);
     }
 
     render() {

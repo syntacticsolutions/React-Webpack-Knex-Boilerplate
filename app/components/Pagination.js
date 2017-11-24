@@ -42,11 +42,19 @@ export default class BootstrapPagination extends React.Component {
     }
 
     setPagination(page) {
-        this.setState({
-            currentPage: page,
-            firstPage: page - 5,
-            lastPage: page
-        });
+        if(page < 5) {
+            this.setState({
+                firstPage: 0,
+                lastPage: 5,
+                currentPage: page
+            });
+        } else {
+            this.setState({
+                currentPage: page,
+                firstPage: page - 5,
+                lastPage: page
+            });
+        }
     }
 
     setFilterPage() {
