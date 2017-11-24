@@ -94,7 +94,7 @@ module.exports = {
 		})
 
 	},
-
+	// delete users by id
 	delete: (req, res) => {
 		return sql('users')
 		.where({'id': req.params.id})

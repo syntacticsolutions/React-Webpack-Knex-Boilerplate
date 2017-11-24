@@ -38,8 +38,8 @@ class UserList extends React.Component {
             deleting: null,
             deletingIndex: null,
             pages: null,
-            currentOrder: null,
-            currentSort: null,
+            currentOrder: 'asc',
+            currentSort: 'id',
             goToPage: null
         };
     }
@@ -203,6 +203,7 @@ class UserList extends React.Component {
                     });
                 }
                 if(page !== finalPage) {
+                    // if we are inserting but going away from last page
                     // reset inserting && editing
                     this.setState({
                         inserting: null,
@@ -308,7 +309,12 @@ class UserList extends React.Component {
     setPage(event) {
         const page = parseInt(event.target.value, 10) || '';
         if(event.key === 'Enter') {
-            if(page > 0 && page < this.state.pages) {
+            if(page > 0 && page <= this.state.pages) {
+                if(this.state.inserting !== null) { // if we are inserting when we filter
+                    // delete the last user and reset page numbers
+                    this.deleteLastUser();
+                    this.setPages();
+                }
                 this.setCurrentPage(page);
             } else {
                 this.showAlertModal('Error', 'That page does not exist.');
@@ -326,26 +332,53 @@ class UserList extends React.Component {
     }
 
     sort(property) {
+        // if table is already sorted and we are not sorting the same property as before
         if(this.state.currentSort !== null && this.state.currentSort !== property) {
             this.state.currentOrder = null;
+            // reset it to null so that we can sort ascending on the next property
             this.setState({
                 currentOrder: this.state.currentOrder
             });
         }
+
+        // set the property to be sorted
         this.state.currentSort = property;
+
+        // if there is no current sort order then we sort ascending
         const order = this.state.currentOrder === null ? 'asc'
         :
+        // if its ascending already then we want to sort descending
         this.state.currentOrder === 'asc' ? 'desc'
+        // else sort ascending
         : 'asc';
+
+        // sort users then set users
         this.state.users = _.orderBy(this.state.users, property, order);
         this.setState({
             users: this.state.users,
             currentOrder: order,
-            currentSort: property
+            currentSort: property,
+            editing: null,
+            currentPage: 1
         });
 
+        if(this.state.inserting !== null) { // if we are inserting when we filter
+            // delete the last user and reset page numbers
+            this.deleteLastUser();
+            this.setPages();
+            this.setState({
+                editing: null,
+                inserting: null
+            });
+        }
+
+        // set currentUsers on currentpage
         this.setCurrentUsers(1);
+
+        // set pagination page to first page
         this.pagination.setFilterPage();
+
+        console.log(this.state.users);
     }
 
     render() {
