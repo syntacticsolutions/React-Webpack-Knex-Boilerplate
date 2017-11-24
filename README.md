@@ -53,7 +53,9 @@ Contains:
 
 ![alt text](https://github.com/syntacticsolutions/react-webpack-bootstrap-boilerplate/blob/master/example_images/testResults.png)
 
-0. Navigate in your browser to `http:localhost:7555/init`
+
+
+0. If you do not have Visual Studio Code, Navigate in your browser to `http:localhost:7555/init`
 
     This will initialize all of your test data. 'OK' will be displayed on the page.
 
