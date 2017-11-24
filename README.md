@@ -24,7 +24,10 @@ Contains:
 ## Test the Backend
 
 0. Make a table in MySQL or your preferred database of choice.
+
 0. Edit your `knexfile.js` in the root directory
+
+    If you are not using MySQL then you will have to use the corresponding client value used by Knex.js
 
 0. `module.exports = {`  
     `client: 'mysql',`  
@@ -48,10 +51,12 @@ Contains:
 
 0. Navigate your browser to `http://localhost:7555/` to get to the app.
 
-    You will have to click on the menu bar to navigate to the user list portion of the app.
+    You will have to click on the hamburger menu button to navigate to the User Management portion of the app.
 
     This is here to show you that it is a single page app using React-Router.
-![alt text](https://github.com/syntacticsolutions/react-webpack-bootstrap-boilerplate/blob/master/example_images/Screen%20Shot%202017-11-21%20at%203.23.43%20PM.png)
+
+    You will notice that the page never reloads.
+
 
 ## Test the Frontend
 
@@ -59,7 +64,7 @@ Contains:
 
 0. Webpack is run by a Webpack Express server that serves content differently than the backend.
 
-    You will be able to test hot module reloading, and webpack updates at `http://localhost:3000/`
+hot module reloading, and webpack updates can be tested at `http://localhost:3000/`
 
 Once running, if you want to hide the redux dev monitor: ```CTRL+H```
 
@@ -73,6 +78,35 @@ This will build the app into the "dist" directory in the root of the project. It
 ![](http://i.imgur.com/uUg2A3S.png)
 
 It should look something like the above image.
+
+
+## Once the app is up.
+
+0. New users can be added by clicking on the floating action button.
+
+![alt text](https://github.com/syntacticsolutions/react-webpack-bootstrap-boilerplate/blob/master/example_images/addusers.png)
+
+0. Users can be edited and deleted using the action buttons at the left side of the table.
+
+![alt text](https://github.com/syntacticsolutions/react-webpack-bootstrap-boilerplate/blob/master/example_images/editUsers.png)
+
+0. Users can then be saved by clicking on the check circle button. Editing can also be canceled by clicking on the red x button.
+
+![alt text](https://github.com/syntacticsolutions/react-webpack-bootstrap-boilerplate/blob/master/example_images/editUserFields.png)
+
+0. Users can be filtered in ascending and descending order for each value in the table.
+
+![alt text](https://github.com/syntacticsolutions/react-webpack-bootstrap-boilerplate/blob/master/example_images/filterUsers.png)
+
+0. The page can be changed using either the pagination buttons at the bottom or by entering an existing page in the "Go To Page" input field.
+
+![alt text](https://github.com/syntacticsolutions/react-webpack-bootstrap-boilerplate/blob/master/example_images/changePage.png)
+
+0. This table is also responsive and the action buttons will stay to the left of the screen even when scrolling-x through the table.
+
+![alt text](https://github.com/syntacticsolutions/react-webpack-bootstrap-boilerplate/blob/master/example_images/responsive.png)
+
+
 
 
 
