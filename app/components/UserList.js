@@ -353,16 +353,6 @@ class UserList extends React.Component {
         // else sort ascending
         : 'asc';
 
-        // sort users then set users
-        this.state.users = _.orderBy(this.state.users, property, order);
-        this.setState({
-            users: this.state.users,
-            currentOrder: order,
-            currentSort: property,
-            editing: null,
-            currentPage: 1
-        });
-
         if(this.state.inserting !== null) { // if we are inserting when we filter
             // delete the last user and reset page numbers
             this.deleteLastUser();
@@ -373,9 +363,17 @@ class UserList extends React.Component {
             });
         }
 
+        // sort users then set users
+        this.state.users = _.orderBy(this.state.users, property, order);
+        this.setState({
+            users: this.state.users,
+            currentOrder: order,
+            currentSort: property,
+            editing: null,
+            currentPage: 1
+        });
         // set currentUsers on currentpage
         this.setCurrentUsers(1);
-
         // set pagination page to first page
         this.pagination.setFilterPage();
     }
